@@ -12,16 +12,18 @@ Widget phone(TextEditingController phoneController, Function(String) onChanged) 
 }
 
 Widget customButton(String text, VoidCallback onPressed) {
-  return SizedBox(
+  return Container(
+    margin: const EdgeInsets.all(16),
     width: double.infinity,
     child: ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
+        elevation: 0,
         backgroundColor: colorPrimaryF4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(16.0),
         child: text16Poppins(text, color: colorPrimary),
       ),
     ),

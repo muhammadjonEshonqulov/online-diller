@@ -24,22 +24,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return SafeArea(
       child: OnUnFocusTap(
         child: Scaffold(
+          bottomNavigationBar: customButton('registration'.tr(), () {
+            navKey.currentState?.push(CupertinoPageRoute(builder: (context) => const OtpPage()));
+          }),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(100),
-                Center(child: textPoppins('registration'.tr(), 24, fontWeight: FontWeight.w700)),
-                const Gap(50),
-                text14Poppins('phone_number'.tr()),
-                const Gap(16),
-                phone(phoneController, (value) {}),
-                const Spacer(),
-                customButton('registration'.tr(), () {
-                  navKey.currentState?.push(CupertinoPageRoute(builder: (context) => const OtpPage()));
-                }),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(100),
+                  Center(child: textPoppins('registration'.tr(), 24, fontWeight: FontWeight.w700)),
+                  const Gap(50),
+                  text14Poppins('phone_number'.tr()),
+                  const Gap(16),
+                  phone(phoneController, (value) {}),
+                  const Gap(70),
+                ],
+              ),
             ),
           ),
         ),

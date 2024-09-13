@@ -5,6 +5,8 @@ import 'package:online_diller/core/res/const_colors.dart';
 import 'package:online_diller/core/services/chuck.dart';
 import 'package:online_diller/src/registration/page/registration_page.dart';
 
+import '../../onbording/page/onboarding_page.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -23,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 5), () {
       navKey.currentState?.pushAndRemoveUntil(CupertinoPageRoute(builder: (_) => const RegistrationPage()), (route) => false);
+      navKey.currentState?.pushAndRemoveUntil(CupertinoPageRoute(builder: (_) => const OnboardingScreen()), (route) => false);
     });
   }
 

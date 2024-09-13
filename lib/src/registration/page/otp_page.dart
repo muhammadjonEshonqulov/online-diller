@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,10 @@ class OtpPage extends StatefulWidget {
 }
 
 class _OtpPageState extends State<OtpPage> {
-  List<TextEditingController> _otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _otpControllers = List.generate(6, (index) => TextEditingController());
 
-  int _remainingTime = 5; // Countdown time in seconds
+  int _remainingTime = 60;
+  int countCode = 0;
   Timer? _timer;
 
   @override
@@ -56,37 +58,45 @@ class _OtpPageState extends State<OtpPage> {
     return SafeArea(
       child: OnUnFocusTap(
         child: Scaffold(
+          bottomNavigationBar: customButton('registration'.tr(), () {}),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Gap(100),
-                textPoppins('otp'.tr(), 24, fontWeight: FontWeight.w700),
-                const Gap(50),
-                text14Poppins('otp_message'.tr(), textAlign: TextAlign.center, color: colorGreyA9),
-                const Gap(16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(6, (index) {
-                    return _otpTextField(context, index);
-                  }),
-                ),
-                const Gap(20),
-                InkWell(
-                  onTap: _remainingTime > 0 ? null : () {
-                    _timer?.cancel();
-                    _remainingTime = 5;
-                    _startTimer();
-                  },
-                  child: text16Poppins(
-                    _remainingTime > 0 ? _formatTime(_remainingTime) : "Qayta kod olish",
-                    color: colorPrimary,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Gap(100),
+                  textPoppins('otp'.tr(), 24, fontWeight: FontWeight.w700),
+                  const Gap(50),
+                  text14Poppins('otp_message'.tr(), textAlign: TextAlign.center, color: colorGreyA9),
+                  const Gap(16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(6, (index) {
+                      return _otpTextField(context, index);
+                    }),
                   ),
-                ),
-                const Spacer(),
-                customButton('submit'.tr(), () {}),
-              ],
+                  const Gap(20),
+                  InkWell(
+                    onTap: _remainingTime > 0
+                        ? null
+                        : () {
+                            _timer?.cancel();
+                            _remainingTime = 60;
+                            _startTimer();
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: text16Poppins(
+                        _remainingTime > 0 ? _formatTime(_remainingTime) : "Qayta kod olish",
+                        color: colorPrimary,
+                      ),
+                    ),
+                  ),
+                  const Gap(70)
+                ],
+              ),
             ),
           ),
         ),
@@ -115,10 +125,23 @@ class _OtpPageState extends State<OtpPage> {
           ),
         ),
         onChanged: (value) {
+          countCode = 0;
+          for (var action in _otpControllers) {
+            if (action.value.text.isNotEmpty) {
+              countCode++;
+            }
+          }
+
+
+          log('_otpControllers count $countCode');
           if (value.length == 1 && index < 5) {
             FocusScope.of(context).nextFocus();
           } else if (value.isEmpty && index > 0) {
             FocusScope.of(context).previousFocus();
+          }
+
+          if(countCode == 6) {
+            FocusScope.of(context).unfocus();
           }
         },
       ),
